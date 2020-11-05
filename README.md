@@ -1,4 +1,5 @@
- # Vault
+# Vault
+
 [![Build Status](https://travis-ci.org/ansible-community/ansible-vault.svg?branch=master)](https://travis-ci.org/ansible-community/ansible-vault)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/ansible-community/ansible-vault.svg)](http://isitmaintained.com/project/ansible-community/ansible-vault "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/ansible-community/ansible-vault.svg)](http://isitmaintained.com/project/ansible-community/ansible-vault "Percentage of issues still open")
@@ -11,6 +12,7 @@ Consul-backed cluster in a Vagrant and VirtualBox based environment. See
 [README_VAGRANT.md](https://github.com/ansible-community/ansible-vault/blob/master/examples/README_VAGRANT.md) and the associated [Vagrantfile](https://github.com/ansible-community/ansible-vault/blob/master/examples/Vagrantfile) for more details about the developer mode setup.
 
 ## Installation
+
 Brian Shumates transferred this role to @ansible-community/hashicorp-tools. This role resides on GitHub pending fixing the integration with Ansible Galaxy. To install this role create a `roles/requirements.yml` file in your Ansible project folder with the following contents:
 
 ```yaml
@@ -28,15 +30,15 @@ This role requires Archlinux, or FreeBSD, or a Debian or RHEL based Linux distri
 might work with other software versions, but does work with the following
 specific software and versions:
 
-* Ansible: 2.8.4
-* Vault: 1.4.0
-* Debian
+- Ansible: 2.8.4
+- Vault: 1.4.0
+- Debian
   - Debian 10 (buster)
   - Debian 9 (stretch)
   - Debian 8 (jessie)
-* FreeBSD 11
-* Ubuntu 18.04
-* ArchLinux
+- FreeBSD 11
+- Ubuntu 18.04
+- ArchLinux
 
 Sorry, there is no planned support at the moment for Windows.
 
@@ -63,7 +65,7 @@ The role defines variables in `defaults/main.yml`:
 ### `vault_pkg`
 
 - package filename
-- Default value: `"vault_{{ vault_version }}_linux_amd64.zip"`
+- Default value: `"vault_{{ vault_version }}_{{ vault_os }}_{{ vault_architecture }}.zip"`
 
 ### `vault_enterprise_pkg`
 
@@ -177,6 +179,7 @@ The role defines variables in `defaults/main.yml`:
 ## Storage Backend Variables
 
 ### `vault_backend`
+
 - Which storage backend should be selected, choices are: consul, etcd, file, raft, s3, and dynamodb
 - Default value: consul
 
@@ -691,26 +694,32 @@ available starting at Vault version 1.4.
 - Default value: false
 
 ### `vault_bsdinit_template`
+
 - BSD init template file
 - Default value: `vault_service_bsd_init.j2`
 
 ### `vault_sysvinit_template`
+
 - SysV init  template file
 - Default value: `vault_sysvinit.j2`
 
 ### `vault_debian_init_template`
+
 - Debian init template file
 - Default value: `vault_service_debian_init.j2`
 
 ### `vault_systemd_template`
+
 - Systemd service template file
 - Default value: `vault_service_systemd.j2`
 
 ### `vault_systemd_service_name`
+
 - Systemd service unit name
 - Default value: "vault"
 
 ### `vault_telemetry_enabled`
+
 - Enable [Vault telemetry](https://www.vaultproject.io/docs/configuration/telemetry.html)
 - If enabled, you must set at least one of the following parameters according to your telemetry provider:
   - *vault_statsite_address* with a format of "FQDN:PORT"
@@ -727,11 +736,6 @@ packages with different naming, so this role was built with support for
 popular Linux distributions and defines these variables to deal with the
 differences across distributions:
 
-### `vault_pkg`
-
-- Vault package filename
-- Default value: `{{ vault_version }}_linux_amd64.zip`
-
 ### `vault_centos_url`
 
 - Vault package download URL
@@ -742,30 +746,15 @@ differences across distributions:
 - List of OS packages to install
 - Default value: list
 
-### `vault_pkg`
-
-- Vault package filename
-- Default value: `"{{ vault_version }}_linux_amd64.zip"`
-
 ### `vault_debian_url`
 
 - Vault package download URL
 - Default value: `"{{ vault_zip_url }}"`
 
-### `vault_sha256`
-
-- Vault download SHA256 summary
-- Default value: SHA256 summary
-
 ### `vault_debian_os_packages`
 
 - List of OS packages to install
 - Default value: list
-
-### `vault_pkg`
-
-- Vault package filename
-- Default value: `"{{ vault_version }}_linux_amd64.zip"`
 
 ### `vault_redhat_url`
 
@@ -782,20 +771,10 @@ differences across distributions:
 - List of OS packages to install
 - Default value: list
 
-### `vault_pkg`
-
-- Vault package filename
-- Default value: `"{{ vault_version }}_linux_amd64.zip"`
-
 ### `vault_ubuntu_url`
 
 - Vault package download URL
 - Default value: `"{{ vault_zip_url }}"`
-
-### `vault_sha256`
-
-- Vault package SHA256 summary
-- Default value: SHA256 summary
 
 ### `vault_enable_log`
 
@@ -836,7 +815,7 @@ unarchive module, so ensure that your system has `gtar` installed.
 
 The role depends on `python-netaddr` so:
 
-```
+```sh
 pip install netaddr
 ```
 
@@ -846,21 +825,21 @@ on the Ansible control host prior to executing the role.
 
 Basic installation is possible using the included `site.yml` playbook:
 
-```
+```sh
 ansible-playbook -i hosts site.yml
 ```
 
 You can also pass variables in using the `--extra-vars` option to the
 `ansible-playbook` command:
 
-```
+```sh
 ansible-playbook -i hosts site.yml --extra-vars "vault_datacenter=maui"
 ```
 
 Specify a template file with a different backend definition
 (see `templates/backend_consul.j2`):
 
-```
+```sh
 ansible-playbook -i hosts site.yml --extra-vars "vault_backend_file=backend_file.j2"
 ```
 
@@ -873,9 +852,10 @@ See `examples/README_VAGRANT.md` for details on quick Vagrant deployments
 under VirtualBox for testing, etc.
 
 ## example virtualBox playbook
+
 example playbook for a file based  vault instance.
 
-```
+```yaml
 - hosts: all
   gather_facts: True
   become: true
@@ -944,7 +924,7 @@ The role can configure HSM based instances. Make sure to reference the [HSM supp
 
 ### `vault_seal_key_mechanism`
 
--  Do not change this unles you know you need to. The encryption/decryption mechanism to use, specified as a decimal or hexadecimal (prefixed by 0x) string. May also be specified by the VAULT_HSM_MECHANISM environment variable.
+- Do not change this unles you know you need to. The encryption/decryption mechanism to use, specified as a decimal or hexadecimal (prefixed by 0x) string. May also be specified by the VAULT_HSM_MECHANISM environment variable.
 - Default value: ''
 - Example for RSA: 0x0009
 
