@@ -315,7 +315,7 @@ The role defines variables in `defaults/main.yml`:
 #### `vault_raft_node_id`
 
 - Identifier for the node in the integrated storage Raft cluster
-- Default value: "raft_node_1"
+- Default value: "{{ inventory_hostname }}"
 
 #### `vault_raft_retry_join`
 

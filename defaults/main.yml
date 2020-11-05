@@ -147,7 +147,7 @@ vault_mysql_max_idle_connections: ""
 vault_mysql_max_connection_lifetime: ""
 
 # raft storage settings
-vault_raft_node_id: "raft_node_1"
+vault_raft_node_id: "{{ inventory_hostname }}"
 vault_raft_retry_join: []
   # - leader_api_addr:
   #   leader_ca_cert_file:
