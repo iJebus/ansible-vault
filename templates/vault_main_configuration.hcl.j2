@@ -93,3 +93,7 @@ telemetry {
   {% endif -%}
 }
 {% endif -%}
+
+{% if vault_enable_log -%}
+log_format = "{{ vault_log_format }}"
+{% endif -%}

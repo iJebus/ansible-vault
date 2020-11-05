@@ -781,6 +781,11 @@ differences across distributions:
 - Enable log to `vault_log_path`
 - Default value: false
 
+### `vault_log_format`
+
+- Format to log in, either `standard` or `json`
+- Default value: `standard`
+
 ### `vault_enable_logrotate`
 
 - Enable logrotation for systemd based systems
