@@ -1,0 +1,84 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: vault01
+    image: geerlingguy/docker-ubuntu2004-ansible
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    capabilities:
+      - IPC_LOCK
+      - SYS_ADMIN
+      - SYSLOG
+    command: "/lib/systemd/systemd"
+    ports:
+      - "8200:8200"
+    pre_build_image: true
+    groups:
+      - vault
+  - name: vault02
+    image: geerlingguy/docker-ubuntu2004-ansible
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    capabilities:
+      - IPC_LOCK
+      - SYS_ADMIN
+      - SYSLOG
+    command: "/lib/systemd/systemd"
+    pre_build_image: true
+    groups:
+      - vault
+  - name: vault03
+    image: geerlingguy/docker-ubuntu2004-ansible
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    capabilities:
+      - IPC_LOCK
+      - SYS_ADMIN
+      - SYSLOG
+    command: "/lib/systemd/systemd"
+    pre_build_image: true
+    groups:
+      - vault
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      interpreter_python: auto_silent
+      callback_whitelist: profile_tasks, timer, yaml
+  inventory:
+    group_vars:
+      vault:
+        validate_certs_during_api_reachable_check: false
+        vault_backend_tls_src_files: /root
+        vault_backend: raft
+        vault_cluster_name: dev-docker
+        vault_enable_log: true
+        vault_enable_logrotate: true
+        vault_group: vault
+        vault_groups: [vault]
+        vault_manage_group: true
+        vault_raft_retry_join: "{{ groups['vault'] }}"
+        vault_tls_disable: false
+        vault_tls_files_remote_src: true
+        vault_tls_gossip: true
+        vault_tls_min_version: tls13
+        vault_tls_src_files: /root
+        vault_version: "1.5.5"
+verifier:
+  name: ansible
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .

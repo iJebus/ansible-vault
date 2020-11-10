@@ -1,0 +1,25 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: copy certs
+      copy:
+        src: "tls/{{ item.src }}"
+        dest: "/root/"
+        owner: root
+        group: root
+        mode: "{{ item.mode }}"
+      with_items:
+        - src: server.crt
+          mode: "0644"
+        - src: server.key
+          mode: "0600"
+        - src: ca.crt
+          mode: "0644"
+    - name: install debug tools
+      apt:
+        name:
+          - curl
+          - vim
+        state: present
+        update_cache: true
