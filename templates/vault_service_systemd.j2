@@ -30,8 +30,12 @@ AmbientCapabilities=CAP_SYSLOG CAP_IPC_LOCK
 {% endif %}
 CapabilityBoundingSet=CAP_SYSLOG CAP_IPC_LOCK
 NoNewPrivileges=yes
-ExecStart=/bin/sh -c '{{ vault_bin_path }}/vault server -config={{ vault_main_config }} -log-level={{ vault_log_level | lower }} {{ vault_exec_output }}'
+ExecStart={{ vault_bin_path }}/vault server -config={{ vault_main_config }} -log-level={{ vault_log_level | lower }}
 ExecReload=/bin/kill --signal HUP $MAINPID
+{% if vault_enable_log %}
+StandardOutput=append:{{ vault_log_path }}/vault.log
+StandardError=append:{{ vault_log_path }}/vault.log
+{% endif %}
 KillMode=process
 KillSignal=SIGINT
 Restart=on-failure
